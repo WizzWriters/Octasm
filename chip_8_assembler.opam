@@ -5,8 +5,8 @@ description: "Assembler for CHIP8"
 maintainer: ["Cezary Świtała"]
 authors: ["Cezary Świtała"]
 license: "MIT"
-homepage: "https://github.com/MusicFreak456/CHIP8-Assembler"
-bug-reports: "https://github.com/MusicFreak456/CHIP8-Assembler/issues"
+homepage: "https://github.com/WizzWriters/chip8-assembler"
+bug-reports: "https://github.com/WizzWriters/chip8-assembler/issues"
 depends: [
   "ocaml"
   "dune" {>= "3.14"}
@@ -26,4 +26,4 @@ build: [
     "@doc" {with-doc}
   ]
 ]
-dev-repo: "git+https://github.com/MusicFreak456/CHIP8-Assembler.git"
+dev-repo: "git+https://github.com/WizzWriters/chip8-assembler.git"

@@ -6,7 +6,7 @@
 (generate_opam_files true)
 
 (source
- (github MusicFreak456/CHIP8-Assembler))
+ (github WizzWriters/chip8-assembler))
 
 (authors "Cezary Świtała")
 
