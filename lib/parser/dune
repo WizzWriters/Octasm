@@ -1,0 +1,3 @@
+(library
+ (name chip8_parser)
+ (libraries syntax chip8_lexer menhir_parser parser_error))

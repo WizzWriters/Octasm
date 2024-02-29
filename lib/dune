@@ -1,2 +1,0 @@
-(library
- (name chip_8_assembler))

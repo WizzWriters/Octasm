@@ -1,26 +1,25 @@
 (lang dune 3.14)
+(using menhir 3.0)
 
 (name chip_8_assembler)
 
 (generate_opam_files true)
 
-; (source
-;  (github username/reponame))
+(source
+ (github MusicFreak456/CHIP8-Assembler))
 
-; (authors "Author Name")
+(authors "Cezary Świtała")
 
-; (maintainers "Maintainer Name")
+(maintainers "Cezary Świtała")
 
-; (license LICENSE)
+(license MIT)
 
 ; (documentation https://url/to/documentation)
 
-; (package
-;  (name chip_8_assembler)
-;  (synopsis "A short synopsis")
-;  (description "A longer description")
-;  (depends ocaml dune)
-;  (tags
-;   (topics "to describe" your project)))
+(package
+ (name chip_8_assembler)
+ (synopsis "Assembler for CHIP8")
+ (description "Assembler for CHIP8")
+ (depends ocaml dune))
 
 ; See the complete stanza docs at https://dune.readthedocs.io/en/stable/dune-files.html#dune-project

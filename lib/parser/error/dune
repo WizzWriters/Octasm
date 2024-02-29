@@ -1,0 +1,3 @@
+(library
+ (name parser_error)
+ (libraries syntax))

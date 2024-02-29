@@ -1,0 +1,6 @@
+(library
+ (name chip8_lexer)
+ (libraries menhir_parser parser_error))
+
+(ocamllex
+ (modules chip8_lexer))
