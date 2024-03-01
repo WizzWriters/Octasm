@@ -5,9 +5,9 @@ module I = MenhirInterpreter
 let get_error env =
   match I.stack env with
   | lazy Nil -> "Unknown error"
-  | lazy (Cons (I.Element (_,_,_,_), _)) -> "Uknown error"
-    (* try Menhir_parser_messages.message (I.number state) with *)
-    (* | Not_found -> "Unknown error" *)
+  | lazy (Cons (I.Element (state,_,_,_), _)) ->
+    try Menhir_parser_messages.message (I.number state) with
+    | Not_found -> "Unknown error"
 
 let rec incremental_parse lexbuf checkpoint =
   match checkpoint with

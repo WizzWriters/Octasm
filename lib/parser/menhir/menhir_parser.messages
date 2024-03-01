@@ -1,0 +1,149 @@
+program: TYPENAME
+##
+## Ends in an error in state: 0.
+##
+## program' -> . program [ # ]
+##
+## The known suffix of the stack is as follows:
+##
+##
+
+<Error 1, Message to be done>
+
+program: DIRECTIVE_TEXT TYPENAME
+##
+## Ends in an error in state: 1.
+##
+## directive_block -> DIRECTIVE_TEXT . nonempty_list(instruction_block) [ EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
+##
+## The known suffix of the stack is as follows:
+## DIRECTIVE_TEXT
+##
+
+<Error 1, Message to be done>
+
+program: DIRECTIVE_TEXT LABEL TYPENAME
+##
+## Ends in an error in state: 2.
+##
+## instruction_block -> LABEL . nonempty_list(instruction) [ LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
+##
+## The known suffix of the stack is as follows:
+## LABEL
+##
+
+<Error 2, Message to be done>
+
+program: DIRECTIVE_TEXT LABEL NAME TYPENAME
+##
+## Ends in an error in state: 3.
+##
+## instruction -> NAME . [ NAME LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
+## instruction -> NAME . argument [ NAME LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
+## instruction -> NAME . argument COMMA argument [ NAME LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
+##
+## The known suffix of the stack is as follows:
+## NAME
+##
+
+<Error 3, Message to be done>
+
+program: DIRECTIVE_TEXT LABEL NAME NAME_REF TYPENAME
+##
+## Ends in an error in state: 7.
+##
+## instruction -> NAME argument . [ NAME LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
+## instruction -> NAME argument . COMMA argument [ NAME LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
+##
+## The known suffix of the stack is as follows:
+## NAME argument
+##
+
+<Error 4, Message to be done>
+
+program: DIRECTIVE_TEXT LABEL NAME NAME_REF COMMA TYPENAME
+##
+## Ends in an error in state: 8.
+##
+## instruction -> NAME argument COMMA . argument [ NAME LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
+##
+## The known suffix of the stack is as follows:
+## NAME argument COMMA
+##
+
+<Error 5, Message to be done>
+
+program: DIRECTIVE_TEXT LABEL NAME NAME_REF COMMA NAME_REF TYPENAME
+##
+## Ends in an error in state: 11.
+##
+## nonempty_list(instruction) -> instruction . [ LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
+## nonempty_list(instruction) -> instruction . nonempty_list(instruction) [ LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
+##
+## The known suffix of the stack is as follows:
+## instruction
+##
+
+<Error 6, Message to be done>
+
+program: DIRECTIVE_DATA TYPENAME
+##
+## Ends in an error in state: 16.
+##
+## directive_block -> DIRECTIVE_DATA . nonempty_list(value_definition) [ EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
+##
+## The known suffix of the stack is as follows:
+## DIRECTIVE_DATA
+##
+
+<Error 7, Message to be done>
+
+program: DIRECTIVE_DATA LABEL REGISTER
+##
+## Ends in an error in state: 17.
+##
+## value_definition -> LABEL . TYPENAME separated_nonempty_list(COMMA,value) [ LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
+##
+## The known suffix of the stack is as follows:
+## LABEL
+##
+
+<Error 8, Message to be done>
+
+program: DIRECTIVE_DATA LABEL TYPENAME TYPENAME
+##
+## Ends in an error in state: 18.
+##
+## value_definition -> LABEL TYPENAME . separated_nonempty_list(COMMA,value) [ LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
+##
+## The known suffix of the stack is as follows:
+## LABEL TYPENAME
+##
+
+<Error 9, Message to be done>
+
+program: DIRECTIVE_DATA LABEL TYPENAME NUMBER TYPENAME
+##
+## Ends in an error in state: 20.
+##
+## separated_nonempty_list(COMMA,value) -> value . [ LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
+## separated_nonempty_list(COMMA,value) -> value . COMMA separated_nonempty_list(COMMA,value) [ LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
+##
+## The known suffix of the stack is as follows:
+## value
+##
+
+<Error 10, Message to be done>
+
+program: DIRECTIVE_DATA LABEL TYPENAME NUMBER COMMA TYPENAME
+##
+## Ends in an error in state: 21.
+##
+## separated_nonempty_list(COMMA,value) -> value COMMA . separated_nonempty_list(COMMA,value) [ LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
+##
+## The known suffix of the stack is as follows:
+## value COMMA
+##
+
+<Error 11, Message to be done>
+
