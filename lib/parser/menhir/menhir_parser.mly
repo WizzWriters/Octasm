@@ -1,5 +1,9 @@
 %{
 open Syntax
+
+let wrap value location =
+  let (start_p, end_p) = location in
+  { start_p; end_p; value }
 %}
 
 %token <string> NAME
@@ -30,28 +34,29 @@ directive_block:
 
 instruction_block:
   | label = LABEL; instructions = instruction+
-    { {label = label; instructions = instructions} }
+    { { label = wrap label $loc(label); instructions } }
   ;
 
 instruction:
-  | opname = NAME { NullaryInstruction opname }
-  | opname = NAME; arg = argument { UnaryInstruction (opname, arg) }
+  | opname = NAME { NullaryInstruction (wrap opname $loc) }
+  | opname = NAME; arg = argument
+    { UnaryInstruction (wrap opname $loc(opname), arg) }
   | opname = NAME; arg1 = argument; COMMA; arg2 = argument
-    { BinaryInstruction (opname, arg1, arg2) }
+    { BinaryInstruction (wrap opname $loc(opname), arg1, arg2) }
   ;
 
 argument:
-  | number = NUMBER { Const number }
-  | name_ref = NAME_REF { NameRef name_ref }
-  | register = REGISTER { Register register }
+  | number = NUMBER { ConstExpr (wrap number $loc) }
+  | name_ref = NAME_REF { NameRefExpr (wrap name_ref $loc) }
+  | register = REGISTER { RegisterExpr (wrap register $loc) }
   ;
 
 value_definition:
   | name = LABEL; tname = TYPENAME;
     value = separated_nonempty_list(COMMA, value)
-    { { name = name; typename = tname; value = value } }
+    {{ name = wrap name $loc(name); typename = wrap tname $loc(tname); value }}
   ;
 
 value:
-  | num = NUMBER { num }
+  | num = NUMBER { NumberExpr (wrap num $loc) }
   ;
