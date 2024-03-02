@@ -8,7 +8,7 @@ program: TYPENAME
 ##
 ##
 
-<Error 1, Message to be done>
+Error code 1 - Message not provided yet
 
 program: DIRECTIVE_TEXT TYPENAME
 ##
@@ -20,7 +20,7 @@ program: DIRECTIVE_TEXT TYPENAME
 ## DIRECTIVE_TEXT
 ##
 
-<Error 1, Message to be done>
+Error code 2 - Message not provided yet
 
 program: DIRECTIVE_TEXT LABEL TYPENAME
 ##
@@ -32,7 +32,7 @@ program: DIRECTIVE_TEXT LABEL TYPENAME
 ## LABEL
 ##
 
-<Error 2, Message to be done>
+Error code 3 - Message not provided yet
 
 program: DIRECTIVE_TEXT LABEL NAME TYPENAME
 ##
@@ -46,7 +46,7 @@ program: DIRECTIVE_TEXT LABEL NAME TYPENAME
 ## NAME
 ##
 
-<Error 3, Message to be done>
+Error code 4 - Message not provided yet
 
 program: DIRECTIVE_TEXT LABEL NAME NAME_REF TYPENAME
 ##
@@ -59,7 +59,7 @@ program: DIRECTIVE_TEXT LABEL NAME NAME_REF TYPENAME
 ## NAME argument
 ##
 
-<Error 4, Message to be done>
+Error code 5 - Message not provided yet
 
 program: DIRECTIVE_TEXT LABEL NAME NAME_REF COMMA TYPENAME
 ##
@@ -71,7 +71,7 @@ program: DIRECTIVE_TEXT LABEL NAME NAME_REF COMMA TYPENAME
 ## NAME argument COMMA
 ##
 
-<Error 5, Message to be done>
+Error code 6 - Message not provided yet
 
 program: DIRECTIVE_TEXT LABEL NAME NAME_REF COMMA NAME_REF TYPENAME
 ##
@@ -84,7 +84,7 @@ program: DIRECTIVE_TEXT LABEL NAME NAME_REF COMMA NAME_REF TYPENAME
 ## instruction
 ##
 
-<Error 6, Message to be done>
+Error code 7 - Message not provided yet
 
 program: DIRECTIVE_DATA TYPENAME
 ##
@@ -96,7 +96,7 @@ program: DIRECTIVE_DATA TYPENAME
 ## DIRECTIVE_DATA
 ##
 
-<Error 7, Message to be done>
+Error code 8 - Message not provided yet
 
 program: DIRECTIVE_DATA LABEL REGISTER
 ##
@@ -108,7 +108,7 @@ program: DIRECTIVE_DATA LABEL REGISTER
 ## LABEL
 ##
 
-<Error 8, Message to be done>
+Error code 9 - Message not provided yet
 
 program: DIRECTIVE_DATA LABEL TYPENAME TYPENAME
 ##
@@ -120,7 +120,7 @@ program: DIRECTIVE_DATA LABEL TYPENAME TYPENAME
 ## LABEL TYPENAME
 ##
 
-<Error 9, Message to be done>
+Error code 10 - Message not provided yet
 
 program: DIRECTIVE_DATA LABEL TYPENAME NUMBER TYPENAME
 ##
@@ -133,7 +133,7 @@ program: DIRECTIVE_DATA LABEL TYPENAME NUMBER TYPENAME
 ## value
 ##
 
-<Error 10, Message to be done>
+Error code 11 - Message not provided yet
 
 program: DIRECTIVE_DATA LABEL TYPENAME NUMBER COMMA TYPENAME
 ##
@@ -145,5 +145,5 @@ program: DIRECTIVE_DATA LABEL TYPENAME NUMBER COMMA TYPENAME
 ## value COMMA
 ##
 
-<Error 11, Message to be done>
+Error code 12 - Message not provided yet
 
