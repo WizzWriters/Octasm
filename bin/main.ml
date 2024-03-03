@@ -31,7 +31,7 @@ let assemble filename =
     true
   with
   | Parser_error.Chip8ParserException exn ->
-    Parser_error.print_error_in_file exn filename;
+    Assembler_error.print_parser_error_in_file exn filename;
     false
 
 let main =

@@ -1,2 +1,3 @@
 (library
- (name assembler_error))
+ (name assembler_error)
+ (libraries parser_error))

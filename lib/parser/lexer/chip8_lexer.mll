@@ -42,7 +42,7 @@
   let get_register_name reg =
     skip_n_letters reg 1
 
-  let typename_of_type t = 
+  let typename_of_type t =
     skip_n_letters t 1
 
   let trim_label label =
@@ -86,9 +86,11 @@ rule read =
   | eof        { EOF }
   | _ {
     let curr_char = Lexing.lexeme lexbuf in
-    let position = Lexing.lexeme_start_p lexbuf in
-    Parser_error.throw
-      (Parser_error.ParsingError(position, "Unexpected character: " ^ curr_char)) }
+    let start_p = Lexing.lexeme_start_p lexbuf in
+    let end_p = Lexing.lexeme_end_p lexbuf in
+    Parser_error.throw @@
+      Parser_error.ParsingError(
+        {start_p; end_p}, "Unexpected character: " ^ curr_char)}
 
 and read_comment_line =
   parse
@@ -101,6 +103,8 @@ and read_comment_block =
   | '\n'       { Lexing.new_line lexbuf; read_comment_block lexbuf }
   | "*/"       { read lexbuf }
   | eof        {
-    let position = Lexing.lexeme_start_p lexbuf in
-    Parser_error.throw (Parser_error.ParsingError(position, "Unclosed comment block")) }
+    let start_p = Lexing.lexeme_start_p lexbuf in
+    let end_p = Lexing.lexeme_end_p lexbuf in
+    Parser_error.throw @@
+      Parser_error.ParsingError({start_p; end_p}, "Unclosed comment block") }
   | _          { read_comment_block lexbuf }

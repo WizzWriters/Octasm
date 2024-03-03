@@ -13,8 +13,10 @@ let rec incremental_parse lexbuf checkpoint =
   match checkpoint with
   | I.Accepted return_value -> return_value
   | I.Rejected ->
-    let position = Lexing.lexeme_start_p lexbuf in
-    Parser_error.throw (Parser_error.ParsingError(position, "Input rejected"))
+    let start_p = Lexing.lexeme_start_p lexbuf in
+    let end_p = Lexing.lexeme_end_p lexbuf in
+    Parser_error.throw @@
+      Parser_error.ParsingError({start_p; end_p}, "Input rejected")
   | I.InputNeeded _ ->
     let token = Chip8_lexer.read lexbuf in
     let start_position = lexbuf.lex_start_p in
@@ -25,8 +27,10 @@ let rec incremental_parse lexbuf checkpoint =
     let next = I.resume checkpoint in
     incremental_parse lexbuf next
   | I.HandlingError env ->
-    let position = Lexing.lexeme_start_p lexbuf in
-    Parser_error.throw (Parser_error.ParsingError(position, get_error env))
+    let start_p = Lexing.lexeme_start_p lexbuf in
+    let end_p = Lexing.lexeme_end_p lexbuf in
+    Parser_error.throw @@
+      Parser_error.ParsingError({start_p; end_p}, get_error env)
 
 let parse entry_point lexbuf =
   incremental_parse lexbuf (entry_point lexbuf.lex_curr_p)
