@@ -19,7 +19,7 @@ let wrap value location =
 %token DIRECTIVE_TEXT
 %token DIRECTIVE_DATA
 
-%start <Syntax.program> program
+%start <Syntax.parsed_program> program
 
 %%
 

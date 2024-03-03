@@ -34,4 +34,10 @@ type directive =
   | Text of instruction_block list
   | Data of value_definition list
 
-type program = directive list
+type parsed_program = directive list
+
+let get_position_of_expression (exp: 'a expression) =
+  let line_num = exp.start_p.pos_lnum in
+  let start_column = exp.start_p.pos_cnum - exp.start_p.pos_bol in
+  let end_column = exp.end_p.pos_cnum - exp.end_p.pos_bol in
+  (line_num, start_column, end_column)

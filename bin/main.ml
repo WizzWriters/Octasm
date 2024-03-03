@@ -27,11 +27,15 @@ let assemble filename =
   if filename = "" then
     (print_endline "Input file not provided"; false)
   else try
-    let _ = Chip8_parser.parse_program_from_file filename in
+    let parsed_program = Chip8_parser.parse_program_from_file filename in
+    let _ = Assembler.assemble parsed_program in
     true
   with
   | Parser_error.Chip8ParserException exn ->
     Assembler_error.print_parser_error_in_file exn filename;
+    false
+  | Assembler_error.Chip8AsmException exn ->
+    Assembler_error.print_assembler_error_in_file exn filename;
     false
 
 let main =

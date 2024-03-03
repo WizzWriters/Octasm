@@ -22,4 +22,4 @@ let string_of_error error =
     Printf.sprintf "Parsing error in line %s " line ^
     Printf.sprintf "columns %d:%d. %s" start_column end_column msg
   | CannotOpenFile (filename, msg) ->
-    "Cannot open file \"" ^ filename ^ "\": " ^ msg ^ "\n"
+    "Cannot open file \"" ^ filename ^ "\": " ^ msg

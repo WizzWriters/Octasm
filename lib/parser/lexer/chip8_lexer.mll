@@ -81,7 +81,7 @@ rule read =
   | directive  { hashtbl_lookup_str lexbuf directive_table }
   | type       { TYPENAME (Lexing.lexeme lexbuf |> typename_of_type ) }
   | symbol     { hashtbl_lookup_char lexbuf symbol_table }
-  | "#"       { read_comment_line lexbuf }
+  | "#"        { read_comment_line lexbuf }
   | "/*"       { read_comment_block lexbuf }
   | eof        { EOF }
   | _ {

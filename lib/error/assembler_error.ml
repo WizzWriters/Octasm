@@ -2,6 +2,8 @@ open Parser_error
 
 type error =
 | ArgumentError of string
+| UknownInstruction of string Syntax.expression
+| SymbolRedefinition of string Syntax.expression
 
 exception Chip8AsmException of error
 
@@ -11,6 +13,12 @@ let throw error =
 let string_of_error error =
   match error with
   | ArgumentError msg -> msg
+  | UknownInstruction parsed_instruction ->
+    let instruction_name = parsed_instruction.value in
+    Printf.sprintf "Uknown instruction: %s" instruction_name
+  | SymbolRedefinition symbol ->
+    let label_name = symbol.value in
+    Printf.sprintf "Redefinition of symbol \"%s\"" label_name
 
 let get_file_line (position: location) filename =
   let input_file = open_in filename in
@@ -48,10 +56,22 @@ let print_error_in_file_position (position: location) msg filename =
   Printf.printf "line %d, columns %d:%d \n" line start_column end_column;
   print_line_with_error line start_column end_column file_line;
   print_newline ();
-  print_string @@ "Message: " ^ msg
+  print_endline @@ "Message: " ^ msg
 
 let print_parser_error_in_file error filename =
   match error with
   | ParsingError (pos, msg) ->
     print_error_in_file_position pos msg filename
   | CannotOpenFile (_, _) -> print_endline @@ Parser_error.string_of_error error
+
+let print_assembler_error_in_file error filename =
+  match error with
+  | UknownInstruction name
+  | SymbolRedefinition name ->
+    let msg = string_of_error error in
+    let location = {
+      start_p = name.start_p;
+      end_p = name.end_p
+    } in
+    print_error_in_file_position location msg filename
+  | _ -> ()
