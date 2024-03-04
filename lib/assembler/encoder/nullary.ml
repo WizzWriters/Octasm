@@ -1,7 +1,8 @@
 open Syntax
 
 let nullary_instruction_list = [
-  "cls", fun () -> [ 0x00; 0xE0 ]
+  ("cls", fun () -> [ 0x00; 0xE0 ]);
+  ("ret", fun () -> [ 0x00; 0xEE ])
 ]
 
 let nullary_instructions_lookup_table =
