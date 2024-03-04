@@ -23,12 +23,26 @@ let parse_argv () =
     print_endline ("Error: " ^ Assembler_error.string_of_error error);
     false
 
+let get_default_output_filename input_filename =
+  let filename = Filename.remove_extension input_filename in
+  filename ^ ".ch8"
+
+let save_to_file program_bytes =
+  let output_file_name =
+    if !output_file = "" then
+      get_default_output_filename !input_file
+    else !output_file in
+  let output = open_out_bin output_file_name in
+  output_bytes output program_bytes;
+  close_out output
+
 let assemble filename =
   if filename = "" then
     (print_endline "Input file not provided"; false)
   else try
     let parsed_program = Chip8_parser.parse_program_from_file filename in
-    let _ = Assembler.assemble parsed_program in
+    let program_bytes = Assembler.assemble parsed_program in
+    save_to_file program_bytes;
     true
   with
   | Parser_error.Chip8ParserException exn ->
