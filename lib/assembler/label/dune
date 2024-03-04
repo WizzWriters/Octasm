@@ -1,0 +1,3 @@
+(library
+ (name labels)
+ (libraries syntax assembler_error))

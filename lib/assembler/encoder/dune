@@ -1,0 +1,3 @@
+(library
+ (name encoder)
+ (libraries syntax assembler_error))
