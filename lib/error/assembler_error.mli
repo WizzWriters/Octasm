@@ -3,6 +3,7 @@ type error =
 | UknownInstruction of string Syntax.expression
 | SymbolRedefinition of string Syntax.expression
 | UndefinedReference of string Syntax.expression
+| ValueOutOfBounds of int Syntax.expression
 | TypeError of Syntax.argument
 
 exception Chip8AsmException of error

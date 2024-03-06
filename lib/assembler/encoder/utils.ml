@@ -13,13 +13,4 @@ let fill_hashtbl hashtbl list = List.iter
   (fun (elem, callback) -> Hashtbl.add hashtbl elem callback)
   list
 
-let split_12bit_int number =
-  if number < 0 || number > 0xfff then
-    raise Exit
-  else
-    (number lsr 8, number land 0xff)
-
-let get_label_offset (label: Syntax.label_name) =
-  match Labels.get_label_description label.value with
-  | Some label_info -> label_info.offset
-  | None -> Assembler_error.throw @@ Assembler_error.UndefinedReference label
+let split_int number = (number lsr 8, number land 0xff)

@@ -1,14 +1,17 @@
 open Syntax
 open Utils
+open Assembler_utils
 
 let encode_jump_instruction arg_expr =
   let argument_value =
     match arg_expr with
-    | ConstExpr number -> number.value
+    | ConstExpr number ->
+      if check_12bit_bounds number.value then number.value
+      else Assembler_error.throw @@ Assembler_error.ValueOutOfBounds number
     | NameRefExpr label -> get_label_offset label
     | _ -> Assembler_error.throw @@ Assembler_error.TypeError arg_expr
   in
-  let (upper, lower) = split_12bit_int argument_value in
+  let (upper, lower) = split_int argument_value in
   [upper lor 0x10; lower]
 
 let unary_instruction_list = [

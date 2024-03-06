@@ -6,6 +6,7 @@ type error =
 | UknownInstruction of string expression
 | SymbolRedefinition of string expression
 | UndefinedReference of string expression
+| ValueOutOfBounds of int expression
 | TypeError of argument
 
 exception Chip8AsmException of error
@@ -25,6 +26,7 @@ let string_of_error error =
   | UndefinedReference symbol ->
     let symbol_name = symbol.value in
     Printf.sprintf "Undefined reference to \"%s\"." symbol_name
+  | ValueOutOfBounds _ -> "Value out of bounds."
   | TypeError _ -> "Value does not match the expected type."
 
 let get_file_line (position: location) filename =
@@ -83,5 +85,9 @@ let print_assembler_error_in_file error filename =
     let msg = string_of_error error in
     let (start_p, end_p) = get_location_of_argument argument in
     let location = { start_p; end_p } in
+    print_error_in_file_position location msg filename
+  | ValueOutOfBounds value ->
+    let msg = string_of_error error in
+    let location = { start_p = value.start_p; end_p = value.end_p } in
     print_error_in_file_position location msg filename
   | _ -> ()
