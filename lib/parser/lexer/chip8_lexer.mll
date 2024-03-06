@@ -54,6 +54,7 @@ let upper_case_letter = ['A' - 'Z']
 let lower_case_letter = ['a' - 'z']
 let letter = upper_case_letter | lower_case_letter
 let digit = ['0' - '9']
+let hex_digit = ['A' - 'F'] | ['a' - 'f']
 let alphanumeric = letter | digit
 
 let whitespace = [' ' '\t']+
@@ -61,11 +62,12 @@ let newline = '\n' | "\r\n"
 let symbol = [',' '=']
 
 let name = letter (alphanumeric | ['_'])*
-let label = '_'* name ':'
+let label_base = '_'* name
+let label = label_base ':'
 let register = '%' alphanumeric+
-let number = digit+ | "0x" (digit | ['A' - 'F'])+ | "0b" ['0' '1']+
+let number = digit+ | "0x" (digit | hex_digit)+ | "0b" ['0' '1']+
 let const = '$' number
-let name_ref = '$' name
+let name_ref = '$' label_base
 let directive = ".text" | ".data"
 let type = '.' name
 

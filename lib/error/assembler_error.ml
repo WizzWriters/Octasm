@@ -1,9 +1,12 @@
 open Parser_error
+open Syntax
 
 type error =
 | ArgumentError of string
-| UknownInstruction of string Syntax.expression
-| SymbolRedefinition of string Syntax.expression
+| UknownInstruction of string expression
+| SymbolRedefinition of string expression
+| UndefinedReference of string expression
+| TypeError of argument
 
 exception Chip8AsmException of error
 
@@ -15,10 +18,14 @@ let string_of_error error =
   | ArgumentError msg -> msg
   | UknownInstruction parsed_instruction ->
     let instruction_name = parsed_instruction.value in
-    Printf.sprintf "Uknown instruction: %s" instruction_name
+    Printf.sprintf "Uknown instruction: %s." instruction_name
   | SymbolRedefinition symbol ->
-    let label_name = symbol.value in
-    Printf.sprintf "Redefinition of symbol \"%s\"" label_name
+    let symbol_name = symbol.value in
+    Printf.sprintf "Redefinition of symbol \"%s\"." symbol_name
+  | UndefinedReference symbol ->
+    let symbol_name = symbol.value in
+    Printf.sprintf "Undefined reference to \"%s\"." symbol_name
+  | TypeError _ -> "Value does not match the expected type."
 
 let get_file_line (position: location) filename =
   let input_file = open_in filename in
@@ -67,11 +74,14 @@ let print_parser_error_in_file error filename =
 let print_assembler_error_in_file error filename =
   match error with
   | UknownInstruction name
-  | SymbolRedefinition name ->
+  | SymbolRedefinition name
+  | UndefinedReference name ->
     let msg = string_of_error error in
-    let location = {
-      start_p = name.start_p;
-      end_p = name.end_p
-    } in
+    let location = { start_p = name.start_p; end_p = name.end_p } in
+    print_error_in_file_position location msg filename
+  | TypeError argument ->
+    let msg = string_of_error error in
+    let (start_p, end_p) = get_location_of_argument argument in
+    let location = { start_p; end_p } in
     print_error_in_file_position location msg filename
   | _ -> ()

@@ -2,6 +2,8 @@ type error =
 | ArgumentError of string
 | UknownInstruction of string Syntax.expression
 | SymbolRedefinition of string Syntax.expression
+| UndefinedReference of string Syntax.expression
+| TypeError of Syntax.argument
 
 exception Chip8AsmException of error
 
