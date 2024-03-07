@@ -2,20 +2,33 @@ open Syntax
 open Utils
 open Assembler_utils
 
+let get_address_value argument =
+  match argument with
+  | ConstExpr number ->
+    if check_12bit_bounds number.value then number.value
+    else Assembler_error.throw @@ Assembler_error.ValueOutOfBounds number
+  | NameRefExpr label -> get_label_offset label
+  | _ -> Assembler_error.throw @@ Assembler_error.TypeError argument
+
+let encode_syscall_instruction arg_expr =
+  let argument_value = get_address_value arg_expr in
+  let (upper, lower) = split_int argument_value in
+  [upper; lower]
+
 let encode_jump_instruction arg_expr =
-  let argument_value =
-    match arg_expr with
-    | ConstExpr number ->
-      if check_12bit_bounds number.value then number.value
-      else Assembler_error.throw @@ Assembler_error.ValueOutOfBounds number
-    | NameRefExpr label -> get_label_offset label
-    | _ -> Assembler_error.throw @@ Assembler_error.TypeError arg_expr
-  in
+  let argument_value = get_address_value arg_expr in
   let (upper, lower) = split_int argument_value in
   [upper lor 0x10; lower]
 
+let encode_call_instruction arg_expr =
+  let argument_value = get_address_value arg_expr in
+  let (upper, lower) = split_int argument_value in
+  [upper lor 0x20; lower]
+
 let unary_instruction_list = [
-  ("jp", encode_jump_instruction)
+  ("sys", encode_syscall_instruction);
+  ("jp", encode_jump_instruction);
+  ("call", encode_call_instruction)
 ]
 
 let unary_instruction_lookup_table =
