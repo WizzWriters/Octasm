@@ -16,9 +16,9 @@ type label_name = string expression
 type type_name = string expression
 
 type value_definition = {
-  name:label_name;
+  name: label_name;
   typename: type_name;
-  value:value list
+  value: value list
 }
 
 type instruction_name = string expression

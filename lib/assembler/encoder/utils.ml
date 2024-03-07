@@ -1,5 +1,9 @@
+let safe_char_of_int x = try char_of_int x with
+  | Invalid_argument _ -> Assembler_error.throw @@
+    Assembler_error.InternalError ("Bad instruction size. " ^ (string_of_int x))
+
 let bytes_of_int_list int_list =
-  let byte_list = List.map (fun x -> char_of_int x) int_list in
+  let byte_list = List.map safe_char_of_int int_list in
   let bytes = Bytes.create @@ List.length byte_list in
   List.iteri (fun i x ->  Bytes.set bytes i x) byte_list;
   bytes

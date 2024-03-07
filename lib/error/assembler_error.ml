@@ -2,8 +2,11 @@ open Parser_error
 open Syntax
 
 type error =
+| InternalError of string
 | ArgumentError of string
 | UknownInstruction of string expression
+| UknownRegister of string expression
+| BadRegister of string expression
 | SymbolRedefinition of string expression
 | UndefinedReference of string expression
 | ValueOutOfBounds of int expression
@@ -16,10 +19,20 @@ let throw error =
 
 let string_of_error error =
   match error with
+  | InternalError msg -> "Internal error!" ^
+    " Please report this to the maintainer: " ^ msg
   | ArgumentError msg -> msg
   | UknownInstruction parsed_instruction ->
     let instruction_name = parsed_instruction.value in
     Printf.sprintf "Uknown instruction: %s." instruction_name
+  | UknownRegister parsed_register ->
+    let register_name = parsed_register.value in
+    Printf.sprintf "Uknown register: %s." register_name
+  | BadRegister parsed_register ->
+    let register_name = parsed_register.value in
+    Printf.sprintf
+      "Register %s cannot be used with this instruction."
+      register_name
   | SymbolRedefinition symbol ->
     let symbol_name = symbol.value in
     Printf.sprintf "Redefinition of symbol \"%s\"." symbol_name
@@ -76,6 +89,8 @@ let print_parser_error_in_file error filename =
 let print_assembler_error_in_file error filename =
   match error with
   | UknownInstruction name
+  | UknownRegister name
+  | BadRegister name
   | SymbolRedefinition name
   | UndefinedReference name ->
     let msg = string_of_error error in
@@ -90,4 +105,4 @@ let print_assembler_error_in_file error filename =
     let msg = string_of_error error in
     let location = { start_p = value.start_p; end_p = value.end_p } in
     print_error_in_file_position location msg filename
-  | _ -> ()
+  | _ -> print_endline @@ string_of_error error

@@ -10,6 +10,11 @@ let get_address_value argument =
   | NameRefExpr label -> get_label_offset label
   | _ -> Assembler_error.throw @@ Assembler_error.TypeError argument
 
+let get_register_expr argument =
+  match argument with
+  | RegisterExpr register_expr -> register_expr
+  | _ -> Assembler_error.throw @@ Assembler_error.TypeError argument
+
 let encode_syscall_instruction arg_expr =
   let argument_value = get_address_value arg_expr in
   let (upper, lower) = split_int argument_value in
@@ -25,10 +30,26 @@ let encode_call_instruction arg_expr =
   let (upper, lower) = split_int argument_value in
   [upper lor 0x20; lower]
 
+let encode_shift_right_instruction arg_expr =
+  let register_expr = get_register_expr arg_expr in
+  match get_register_from_register_expr register_expr with
+  | GeneralPurpose x ->
+    [ 0x80 lor x; (x lsl 4) lor 0x06 ]
+  | _ -> Assembler_error.throw @@ Assembler_error.BadRegister register_expr
+
+let encode_shift_left_instruction arg_expr =
+  let register_expr = get_register_expr arg_expr in
+  match get_register_from_register_expr register_expr with
+  | GeneralPurpose x ->
+    [ 0x80 lor x; (x lsl 4) lor 0x0E ]
+  | _ -> Assembler_error.throw @@ Assembler_error.BadRegister register_expr
+
 let unary_instruction_list = [
   ("sys", encode_syscall_instruction);
   ("jp", encode_jump_instruction);
-  ("call", encode_call_instruction)
+  ("call", encode_call_instruction);
+  ("shr", encode_shift_right_instruction);
+  ("shl", encode_shift_left_instruction)
 ]
 
 let unary_instruction_lookup_table =

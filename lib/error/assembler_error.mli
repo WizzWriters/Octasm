@@ -1,6 +1,9 @@
 type error =
+| InternalError of string
 | ArgumentError of string
 | UknownInstruction of string Syntax.expression
+| UknownRegister of string Syntax.expression
+| BadRegister of string Syntax.expression
 | SymbolRedefinition of string Syntax.expression
 | UndefinedReference of string Syntax.expression
 | ValueOutOfBounds of int Syntax.expression
