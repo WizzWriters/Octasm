@@ -1,4 +1,4 @@
 (executable
- (public_name chip8_asm)
+ (public_name octasm)
  (name main)
  (libraries assembler_error chip8_parser parser_error assembler))
