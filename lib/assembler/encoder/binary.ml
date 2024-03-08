@@ -38,6 +38,19 @@ let encode_skip_neq_instruction arg1 arg2 =
   | RegisterExpr reg_expr, ConstExpr const_expr ->
     let encode_skip_neq reg byte = [0x40 lor reg; byte] in
     encode_reg_byte_instruction reg_expr const_expr encode_skip_neq
+  | RegisterExpr reg1_expr, RegisterExpr reg2_expr ->
+    let encode_skip_neq reg1 reg2 = [0x90 lor reg1; reg2 lsl 4] in
+    encode_reg_reg_instruction reg1_expr reg2_expr encode_skip_neq
+  | RegisterExpr _, _ ->
+    Assembler_error.throw @@ Assembler_error.TypeError arg2
+  | _,_ ->
+    Assembler_error.throw @@ Assembler_error.TypeError arg1
+
+let encode_or_instruction arg1 arg2 =
+  match arg1, arg2 with
+  | RegisterExpr reg1_expr, RegisterExpr reg2_expr ->
+    let encode_or reg1 reg2 = [0x80 lor reg1; (reg2 lsl 4) lor 0x01] in
+    encode_reg_reg_instruction reg1_expr reg2_expr encode_or
   | RegisterExpr _, _ ->
     Assembler_error.throw @@ Assembler_error.TypeError arg2
   | _,_ ->
@@ -45,7 +58,8 @@ let encode_skip_neq_instruction arg1 arg2 =
 
 let binary_instruction_list = [
   ("se", encode_skip_eq_instruction);
-  ("sne", encode_skip_neq_instruction)
+  ("sne", encode_skip_neq_instruction);
+  ("or", encode_or_instruction)
 ]
 
 let binary_instruction_lookup_table =
