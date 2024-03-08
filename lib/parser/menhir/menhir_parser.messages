@@ -59,7 +59,7 @@ program: DIRECTIVE_TEXT LABEL NAME NAME_REF TYPENAME
 ## NAME argument
 ##
 
-Error code 5 - Message not provided yet
+Expected another instruction or a comma separated list of arguments.
 
 program: DIRECTIVE_TEXT LABEL NAME NAME_REF COMMA TYPENAME
 ##

@@ -69,12 +69,12 @@ let () = fill_hashtbl unary_instruction_lookup_table unary_instruction_list
 
 let encode buffer pos (instruction: string expression) argument =
   let instruction_name = instruction.value in
-  if not @@ Hashtbl.mem unary_instruction_lookup_table instruction_name then
-    Assembler_error.throw @@ Assembler_error.UknownInstruction instruction
-  else
-    let encode_callback =
-      Hashtbl.find unary_instruction_lookup_table instruction_name in
-    let instruction_code = encode_callback argument |> bytes_of_int_list in
+  match Hashtbl.find_opt unary_instruction_lookup_table instruction_name with
+  | Some encode_callback ->
+    let instruction_code =
+      encode_callback argument |> bytes_of_int_list in
     let instruction_code_length =
       write_instruction_code buffer pos instruction_code in
     (buffer, pos + instruction_code_length)
+  | None -> Assembler_error.throw @@
+    Assembler_error.UknownInstruction instruction
