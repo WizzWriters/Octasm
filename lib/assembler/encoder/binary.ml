@@ -17,7 +17,7 @@ let encode_reg_reg_instruction reg1_expr reg2_expr callback =
   | GeneralPurpose regnum1, GeneralPurpose regnum2 -> callback regnum1 regnum2
   | GeneralPurpose _, _ ->
     Assembler_error.throw @@ Assembler_error.BadRegister reg2_expr
-  | _,_ ->
+  | _, _ ->
     Assembler_error.throw @@ Assembler_error.BadRegister reg1_expr
 
 let encode_skip_eq_instruction arg1 arg2 =
@@ -30,7 +30,7 @@ let encode_skip_eq_instruction arg1 arg2 =
     encode_reg_reg_instruction reg1_expr reg2_expr encode_skip_eq
   | RegisterExpr _, _ ->
     Assembler_error.throw @@ Assembler_error.TypeError arg2
-  | _,_ ->
+  | _, _ ->
     Assembler_error.throw @@ Assembler_error.TypeError arg2
 
 let encode_skip_neq_instruction arg1 arg2 =
@@ -43,7 +43,7 @@ let encode_skip_neq_instruction arg1 arg2 =
     encode_reg_reg_instruction reg1_expr reg2_expr encode_skip_neq
   | RegisterExpr _, _ ->
     Assembler_error.throw @@ Assembler_error.TypeError arg2
-  | _,_ ->
+  | _, _ ->
     Assembler_error.throw @@ Assembler_error.TypeError arg1
 
 let encode_arythmetic_instruction inst_number arg1 arg2 =
@@ -53,7 +53,7 @@ let encode_arythmetic_instruction inst_number arg1 arg2 =
     encode_reg_reg_instruction reg1_expr reg2_expr encode
   | RegisterExpr _, _ ->
     Assembler_error.throw @@ Assembler_error.TypeError arg2
-  | _,_ ->
+  | _, _ ->
     Assembler_error.throw @@ Assembler_error.TypeError arg1
 
 let encode_or_instruction = encode_arythmetic_instruction 0x01
@@ -72,7 +72,7 @@ let encode_add_reg_reg_instruction reg1_expr reg2_expr =
     [0xF0 lor regnum; 0x1E]
   | LongRegister, _ | GeneralPurpose _, _ ->
     Assembler_error.throw @@ Assembler_error.BadRegister reg2_expr
-  | _,_ ->
+  | _, _ ->
     Assembler_error.throw @@ Assembler_error.BadRegister reg1_expr
 
 let encode_add_instruction arg1 arg2 =
@@ -84,7 +84,17 @@ let encode_add_instruction arg1 arg2 =
     encode_add_reg_reg_instruction reg1_expr reg2_expr
   | RegisterExpr _, _ ->
     Assembler_error.throw @@ Assembler_error.TypeError arg2
-  | _,_ ->
+  | _, _ ->
+    Assembler_error.throw @@ Assembler_error.TypeError arg1
+
+let encode_rand_instruction arg1 arg2 =
+  match arg1, arg2 with
+  | RegisterExpr reg_expr, ConstExpr const_expr ->
+    let encode_rand reg byte = [0xC0 lor reg; byte] in
+    encode_reg_byte_instruction reg_expr const_expr encode_rand
+  | RegisterExpr _, _ ->
+    Assembler_error.throw @@ Assembler_error.TypeError arg2
+  | _, _ ->
     Assembler_error.throw @@ Assembler_error.TypeError arg1
 
 let binary_instruction_list = [
@@ -95,7 +105,8 @@ let binary_instruction_list = [
   ("xor", encode_xor_instruction);
   ("add", encode_add_instruction);
   ("sub", encode_sub_instruction);
-  ("subn", encode_subn_instruction)
+  ("subn", encode_subn_instruction);
+  ("rnd", encode_rand_instruction)
 ]
 
 let binary_instruction_lookup_table =
