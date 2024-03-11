@@ -14,6 +14,8 @@ let wrap value location =
 %token <string> REGISTER
 
 %token COMMA
+%token L_PARENTHESES
+%token R_PARENTHESES
 %token EOF
 
 %token DIRECTIVE_TEXT
@@ -46,6 +48,8 @@ argument:
   | number = NUMBER { ConstExpr (wrap number $loc) }
   | name_ref = NAME_REF { NameRefExpr (wrap name_ref $loc) }
   | register = REGISTER { RegisterExpr (wrap register $loc) }
+  | L_PARENTHESES; register = REGISTER; R_PARENTHESES
+    { IndirectRefExpr (wrap register $loc) }
   ;
 
 value_definition:

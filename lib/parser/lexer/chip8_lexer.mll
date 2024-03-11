@@ -2,7 +2,9 @@
   open Menhir_parser
 
   let symbols = [
-    ',' , COMMA;
+    ',', COMMA;
+    '(', L_PARENTHESES;
+    ')', R_PARENTHESES
   ]
 
   let directives = [
@@ -59,7 +61,7 @@ let alphanumeric = letter | digit
 
 let whitespace = [' ' '\t']+
 let newline = '\n' | "\r\n"
-let symbol = [',' '=']
+let symbol = [',' '(' ')']
 
 let name = letter (alphanumeric | ['_'])*
 let label_base = '_'* name

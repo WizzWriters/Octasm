@@ -8,6 +8,7 @@ type argument =
   | ConstExpr of int expression
   | NameRefExpr of string expression
   | RegisterExpr of string expression
+  | IndirectRefExpr of string expression
 
 type value =
   | NumberExpr of int expression
@@ -41,4 +42,5 @@ let get_location_of_argument argument =
   match argument with
   | ConstExpr expr -> (expr.start_p, expr.end_p)
   | NameRefExpr expr
-  | RegisterExpr expr -> (expr.start_p, expr.end_p)
+  | RegisterExpr expr
+  | IndirectRefExpr expr -> (expr.start_p, expr.end_p)
