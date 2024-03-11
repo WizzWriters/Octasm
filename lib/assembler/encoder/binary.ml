@@ -13,7 +13,7 @@ let encode_reg_byte_instruction reg_expr (byte_expr: int expression) callback =
 let encode_reg_reg_instruction reg1_expr reg2_expr callback =
   let register1 = get_register_from_register_expr reg1_expr in
   let register2 = get_register_from_register_expr reg2_expr in
-  match (register1, register2) with
+  match register1, register2 with
   | GeneralPurpose regnum1, GeneralPurpose regnum2 -> callback regnum1 regnum2
   | GeneralPurpose _, _ ->
     Assembler_error.throw @@ Assembler_error.BadRegister reg2_expr
@@ -97,6 +97,21 @@ let encode_rand_instruction arg1 arg2 =
   | _, _ ->
     Assembler_error.throw @@ Assembler_error.TypeError arg1
 
+let encode_jp_instruction arg1 arg2 =
+  match arg1, arg2 with
+  | RegisterExpr reg_expr, ConstExpr _
+  | RegisterExpr reg_expr, NameRefExpr _ ->
+    let register = get_register_from_register_expr reg_expr in
+    let address = get_address_value arg2 in
+    let upper, lower = split_int address in
+    if register = GeneralPurpose 0 then
+      [0xB0 lor upper; lower]
+    else Assembler_error.throw @@ Assembler_error.BadRegister reg_expr
+  | RegisterExpr _, _ ->
+    Assembler_error.throw @@ Assembler_error.TypeError arg2
+  | _, _ ->
+    Assembler_error.throw @@ Assembler_error.TypeError arg1
+
 let binary_instruction_list = [
   ("se", encode_skip_eq_instruction);
   ("sne", encode_skip_neq_instruction);
@@ -106,6 +121,7 @@ let binary_instruction_list = [
   ("add", encode_add_instruction);
   ("sub", encode_sub_instruction);
   ("subn", encode_subn_instruction);
+  ("jp", encode_jp_instruction);
   ("rnd", encode_rand_instruction)
 ]
 

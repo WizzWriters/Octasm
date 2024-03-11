@@ -2,14 +2,6 @@ open Syntax
 open Utils
 open Assembler_utils
 
-let get_address_value argument =
-  match argument with
-  | ConstExpr number ->
-    if check_12bit_bounds number.value then number.value
-    else Assembler_error.throw @@ Assembler_error.ValueOutOfBounds number
-  | NameRefExpr label -> get_label_offset label
-  | _ -> Assembler_error.throw @@ Assembler_error.TypeError argument
-
 let get_register_expr argument =
   match argument with
   | RegisterExpr register_expr -> register_expr
@@ -17,17 +9,17 @@ let get_register_expr argument =
 
 let encode_syscall_instruction arg_expr =
   let argument_value = get_address_value arg_expr in
-  let (upper, lower) = split_int argument_value in
+  let upper, lower = split_int argument_value in
   [upper; lower]
 
 let encode_jump_instruction arg_expr =
   let argument_value = get_address_value arg_expr in
-  let (upper, lower) = split_int argument_value in
+  let upper, lower = split_int argument_value in
   [upper lor 0x10; lower]
 
 let encode_call_instruction arg_expr =
   let argument_value = get_address_value arg_expr in
-  let (upper, lower) = split_int argument_value in
+  let upper, lower = split_int argument_value in
   [upper lor 0x20; lower]
 
 let encode_general_purpose_register_instruction arg_expr callback =
