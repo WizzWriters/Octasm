@@ -1,8 +1,10 @@
 open Syntax
+open List
 
-let encode_instruction (buffer, pos) instruction =
-  match instruction with
-  | NullaryInstruction name -> Nullary.encode buffer pos name
-  | UnaryInstruction (name, arg) -> Unary.encode buffer pos name arg
-  | BinaryInstruction (name, arg1, arg2) ->
-    Binary.encode buffer pos name arg1 arg2
+let encode_instruction (buffer, pos) (instruction: instruction) =
+  let name, arguments = instruction in
+  match List.length arguments with
+  | 0 -> Nullary.encode buffer pos name
+  | 1 -> Unary.encode buffer pos name (nth arguments 0)
+  | 2 -> Binary.encode buffer pos name (nth arguments 0) (nth arguments 1)
+  | _ -> Assembler_error.throw @@ Assembler_error.UknownInstruction name

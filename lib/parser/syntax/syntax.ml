@@ -22,12 +22,7 @@ type value_definition = {
 }
 
 type instruction_name = string expression
-
-type instruction =
-  | NullaryInstruction of instruction_name
-  | UnaryInstruction of instruction_name * argument
-  | BinaryInstruction of instruction_name * argument * argument
-
+type instruction = instruction_name * argument list
 type instruction_block = { label:label_name; instructions:instruction list }
 
 type directive =

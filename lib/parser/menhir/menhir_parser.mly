@@ -38,11 +38,8 @@ instruction_block:
   ;
 
 instruction:
-  | opname = NAME { NullaryInstruction (wrap opname $loc) }
-  | opname = NAME; arg = argument
-    { UnaryInstruction (wrap opname $loc(opname), arg) }
-  | opname = NAME; arg1 = argument; COMMA; arg2 = argument
-    { BinaryInstruction (wrap opname $loc(opname), arg1, arg2) }
+  | opname = NAME; arguments = separated_list(COMMA, argument)
+    { (wrap opname $loc(opname), arguments) }
   ;
 
 argument:

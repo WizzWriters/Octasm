@@ -24,7 +24,8 @@ let string_of_error error =
   | ArgumentError msg -> msg
   | UknownInstruction parsed_instruction ->
     let instruction_name = parsed_instruction.value in
-    Printf.sprintf "Uknown instruction: %s." instruction_name
+    Printf.sprintf "Uknown instruction: %s. Check spelling and number of arguments"
+    instruction_name
   | UknownRegister parsed_register ->
     let register_name = parsed_register.value in
     Printf.sprintf "Uknown register: %s." register_name

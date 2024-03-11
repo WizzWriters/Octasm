@@ -38,9 +38,7 @@ program: DIRECTIVE_TEXT LABEL NAME TYPENAME
 ##
 ## Ends in an error in state: 3.
 ##
-## instruction -> NAME . [ NAME LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
-## instruction -> NAME . argument [ NAME LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
-## instruction -> NAME . argument COMMA argument [ NAME LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
+## instruction -> NAME . loption(separated_nonempty_list(COMMA,argument)) [ NAME LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
 ##
 ## The known suffix of the stack is as follows:
 ## NAME
@@ -50,45 +48,32 @@ Error code 4 - Message not provided yet
 
 program: DIRECTIVE_TEXT LABEL NAME NAME_REF TYPENAME
 ##
-## Ends in an error in state: 7.
+## Ends in an error in state: 9.
 ##
-## instruction -> NAME argument . [ NAME LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
-## instruction -> NAME argument . COMMA argument [ NAME LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
+## separated_nonempty_list(COMMA,argument) -> argument . [ NAME LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
+## separated_nonempty_list(COMMA,argument) -> argument . COMMA separated_nonempty_list(COMMA,argument) [ NAME LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
 ##
 ## The known suffix of the stack is as follows:
-## NAME argument
+## argument
 ##
 
 Expected another instruction or a comma separated list of arguments.
 
 program: DIRECTIVE_TEXT LABEL NAME NAME_REF COMMA TYPENAME
 ##
-## Ends in an error in state: 8.
+## Ends in an error in state: 10.
 ##
-## instruction -> NAME argument COMMA . argument [ NAME LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
+## separated_nonempty_list(COMMA,argument) -> argument COMMA . separated_nonempty_list(COMMA,argument) [ NAME LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
 ##
 ## The known suffix of the stack is as follows:
-## NAME argument COMMA
+## argument COMMA
 ##
 
 Error code 6 - Message not provided yet
 
-program: DIRECTIVE_TEXT LABEL NAME NAME_REF COMMA NAME_REF TYPENAME
-##
-## Ends in an error in state: 11.
-##
-## nonempty_list(instruction) -> instruction . [ LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
-## nonempty_list(instruction) -> instruction . nonempty_list(instruction) [ LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
-##
-## The known suffix of the stack is as follows:
-## instruction
-##
-
-Error code 7 - Message not provided yet
-
 program: DIRECTIVE_DATA TYPENAME
 ##
-## Ends in an error in state: 16.
+## Ends in an error in state: 18.
 ##
 ## directive_block -> DIRECTIVE_DATA . nonempty_list(value_definition) [ EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
 ##
@@ -100,7 +85,7 @@ Error code 8 - Message not provided yet
 
 program: DIRECTIVE_DATA LABEL REGISTER
 ##
-## Ends in an error in state: 17.
+## Ends in an error in state: 19.
 ##
 ## value_definition -> LABEL . TYPENAME separated_nonempty_list(COMMA,value) [ LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
 ##
@@ -112,7 +97,7 @@ Error code 9 - Message not provided yet
 
 program: DIRECTIVE_DATA LABEL TYPENAME TYPENAME
 ##
-## Ends in an error in state: 18.
+## Ends in an error in state: 20.
 ##
 ## value_definition -> LABEL TYPENAME . separated_nonempty_list(COMMA,value) [ LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
 ##
@@ -124,7 +109,7 @@ Error code 10 - Message not provided yet
 
 program: DIRECTIVE_DATA LABEL TYPENAME NUMBER TYPENAME
 ##
-## Ends in an error in state: 20.
+## Ends in an error in state: 22.
 ##
 ## separated_nonempty_list(COMMA,value) -> value . [ LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
 ## separated_nonempty_list(COMMA,value) -> value . COMMA separated_nonempty_list(COMMA,value) [ LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
@@ -137,7 +122,7 @@ Error code 11 - Message not provided yet
 
 program: DIRECTIVE_DATA LABEL TYPENAME NUMBER COMMA TYPENAME
 ##
-## Ends in an error in state: 21.
+## Ends in an error in state: 23.
 ##
 ## separated_nonempty_list(COMMA,value) -> value COMMA . separated_nonempty_list(COMMA,value) [ LABEL EOF DIRECTIVE_TEXT DIRECTIVE_DATA ]
 ##
@@ -146,4 +131,3 @@ program: DIRECTIVE_DATA LABEL TYPENAME NUMBER COMMA TYPENAME
 ##
 
 Error code 12 - Message not provided yet
-
