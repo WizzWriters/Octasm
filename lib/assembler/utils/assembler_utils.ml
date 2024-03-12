@@ -11,6 +11,7 @@ let get_label_offset (label: Syntax.label_name) =
   | Some label_info -> label_info.offset
   | None -> Assembler_error.throw @@ Assembler_error.UndefinedReference label
 
+let check_4bit_bounds number = number >= 0 && number <= 0xf
 let check_12bit_bounds number = number >= 0 && number <= 0xfff
 let check_byte_bounds number = number >= 0 && number <= 0xff
 let check_register_bounds number = number >= 0 && number <= 15
