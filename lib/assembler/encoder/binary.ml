@@ -112,6 +112,71 @@ let encode_jp_instruction arg1 arg2 =
   | _, _ ->
     Assembler_error.throw @@ Assembler_error.TypeError arg1
 
+let encode_load_byte_instruction regnum (const_expr: int expression) =
+  let byte = const_expr.value in
+  if check_byte_bounds byte then
+    [0x60 lor regnum; byte]
+  else Assembler_error.throw @@ Assembler_error.ValueOutOfBounds const_expr
+
+let encode_load_register_to_general_reg_instruction regnum reg_expr =
+  let snd_register = get_register_from_register_expr reg_expr in
+  match snd_register with
+  | GeneralPurpose snd_regnum -> [0x80 lor regnum; (snd_regnum lsl 4) lor 0x01]
+  | DelayTimerRegister -> [0xF0 lor regnum; 0x07]
+  | _ -> Assembler_error.throw @@ Assembler_error.BadRegister reg_expr
+
+let encode_load_to_register_instruction reg_expr source =
+  let register = get_register_from_register_expr reg_expr in
+  match register, source with
+  | GeneralPurpose regnum, ConstExpr const_expr ->
+    encode_load_byte_instruction regnum const_expr
+  | GeneralPurpose regnum, RegisterExpr reg_expr ->
+    encode_load_register_to_general_reg_instruction regnum reg_expr
+  | GeneralPurpose regnum, IndirectRefExpr regname ->
+    let register = get_register_from_register_expr regname in
+    begin match register with
+    | LongRegister -> [0xF0 lor regnum; 0x65]
+    | _ -> Assembler_error.throw @@ Assembler_error.BadRegister reg_expr
+    end
+  | LongRegister, ConstExpr _
+  | LongRegister, NameRefExpr _ ->
+    let address = get_address_value source in
+    let (upper, lower) = split_int address in [0xA0 lor upper; lower]
+  | DelayTimerRegister, RegisterExpr reg_expr ->
+    let snd_register = get_register_from_register_expr reg_expr in
+    begin match snd_register with
+    | GeneralPurpose regnum -> [0xF0 lor regnum; 0x15]
+    | _ -> Assembler_error.throw @@ Assembler_error.BadRegister reg_expr
+    end
+  | SoundTimerRegister, RegisterExpr reg_expr ->
+    let snd_register = get_register_from_register_expr reg_expr in
+    begin match snd_register with
+    | GeneralPurpose regnum -> [0xF0 lor regnum; 0x18]
+    | _ -> Assembler_error.throw @@ Assembler_error.BadRegister reg_expr
+    end
+  | _, _ -> Assembler_error.throw @@ Assembler_error.TypeError source
+
+let encode_indirect_load_instruction dst_regname src_regname =
+  let dst_register = get_register_from_register_expr dst_regname in
+  let src_register = get_register_from_register_expr src_regname in
+  match dst_register, src_register with
+  | LongRegister, GeneralPurpose regnum -> [0xF0 lor regnum; 0x55]
+  | LongRegister, _ ->
+    Assembler_error.throw @@ Assembler_error.BadRegister src_regname
+  | _, _ ->
+    Assembler_error.throw @@ Assembler_error.BadRegister dst_regname
+
+let encode_load_instruction arg1 arg2 =
+  match arg1,arg2 with
+  | RegisterExpr reg_expr, _ ->
+    encode_load_to_register_instruction reg_expr arg2
+  | IndirectRefExpr dst_regname, RegisterExpr src_regname ->
+    encode_indirect_load_instruction dst_regname src_regname
+  | IndirectRefExpr _, _ ->
+    Assembler_error.throw @@ Assembler_error.TypeError arg2
+  | _, _ ->
+    Assembler_error.throw @@ Assembler_error.TypeError arg1
+
 let binary_instruction_list = [
   ("se", encode_skip_eq_instruction);
   ("sne", encode_skip_neq_instruction);
@@ -122,7 +187,8 @@ let binary_instruction_list = [
   ("sub", encode_sub_instruction);
   ("subn", encode_subn_instruction);
   ("jp", encode_jp_instruction);
-  ("rnd", encode_rand_instruction)
+  ("rnd", encode_rand_instruction);
+  ("ld", encode_load_instruction)
 ]
 
 let binary_instruction_lookup_table =
