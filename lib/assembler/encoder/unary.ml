@@ -44,6 +44,18 @@ let encode_do_not_skip_instruction arg_expr =
   encode_general_purpose_register_instruction arg_expr
   (fun x -> [ 0xE0 lor x; 0xA1 ])
 
+let encode_load_key_instruction arg_expr =
+  encode_general_purpose_register_instruction arg_expr
+  (fun regnum -> [0xF0 lor regnum; 0x0A])
+
+let encode_load_sprite_instruction arg_expr =
+  encode_general_purpose_register_instruction arg_expr
+  (fun regnum -> [0xF0 lor regnum; 0x29])
+
+let encode_load_bcd_instruction arg_expr =
+  encode_general_purpose_register_instruction arg_expr
+  (fun regnum -> [0xF0 lor regnum; 0x33])
+
 let unary_instruction_list = [
   ("sys", encode_syscall_instruction);
   ("jp", encode_jump_instruction);
@@ -51,7 +63,10 @@ let unary_instruction_list = [
   ("shr", encode_shift_right_instruction);
   ("shl", encode_shift_left_instruction);
   ("skp", encode_skip_instruction);
-  ("sknp", encode_do_not_skip_instruction)
+  ("sknp", encode_do_not_skip_instruction);
+  ("ldk", encode_load_key_instruction);
+  ("lds", encode_load_sprite_instruction);
+  ("ldb", encode_load_bcd_instruction)
 ]
 
 let unary_instruction_lookup_table =
