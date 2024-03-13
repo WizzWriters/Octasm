@@ -121,7 +121,7 @@ let encode_load_byte_instruction regnum (const_expr: int expression) =
 let encode_load_register_to_general_reg_instruction regnum reg_expr =
   let snd_register = get_register_from_register_expr reg_expr in
   match snd_register with
-  | GeneralPurpose snd_regnum -> [0x80 lor regnum; (snd_regnum lsl 4) lor 0x01]
+  | GeneralPurpose snd_regnum -> [0x80 lor regnum; (snd_regnum lsl 4)]
   | DelayTimerRegister -> [0xF0 lor regnum; 0x07]
   | _ -> Assembler_error.throw @@ Assembler_error.BadRegister reg_expr
 
