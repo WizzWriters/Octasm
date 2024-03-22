@@ -10,6 +10,7 @@ bug-reports: "https://github.com/WizzWriters/Octasm/issues"
 depends: [
   "ocaml"
   "dune" {>= "3.14"}
+  "menhir"
   "odoc" {with-doc}
 ]
 build: [

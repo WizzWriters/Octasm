@@ -20,6 +20,6 @@
  (name octasm)
  (synopsis "CHIP8 Assembler")
  (description "CHIP8 assembler with syntax inspired by GNU Asssembler.")
- (depends ocaml dune))
+ (depends ocaml dune menhir))
 
 ; See the complete stanza docs at https://dune.readthedocs.io/en/stable/dune-files.html#dune-project
