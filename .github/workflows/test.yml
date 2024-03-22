@@ -5,7 +5,7 @@ on:
   - push
   - pull_request
 jobs:
-  test:
+  runtest:
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
@@ -16,6 +16,9 @@ jobs:
         uses: ocaml/setup-ocaml@v2
         with:
           ocaml-compiler: "5.1"
-      - run: opam install . --deps-only --with-test
-      - run: opam exec -- dune build
-      - run: opam exec -- dune runtest
+      - name: Install opam dependencies 🔗
+        run: opam install . --deps-only --with-test
+      - name: Build the project 🔨
+        run: opam exec -- dune build
+      - name: Run tests 😏
+        run: opam exec -- dune runtest
