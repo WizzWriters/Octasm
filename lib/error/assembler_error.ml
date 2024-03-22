@@ -6,11 +6,13 @@ type error =
 | ArgumentError of string
 | UknownInstruction of string expression
 | UknownRegister of string expression
+| UknownType of string expression
 | BadRegister of string expression
 | SymbolRedefinition of string expression
 | UndefinedReference of string expression
 | ValueOutOfBounds of int expression
 | TypeError of argument
+| InvalidValueDefinition of string expression * string
 
 exception Chip8AsmException of error
 
@@ -24,11 +26,14 @@ let string_of_error error =
   | ArgumentError msg -> msg
   | UknownInstruction parsed_instruction ->
     let instruction_name = parsed_instruction.value in
-    Printf.sprintf "Uknown instruction: %s. Check spelling and number of arguments"
-    instruction_name
+    Printf.sprintf "Uknown instruction: %s. %s"
+      instruction_name "Check spelling and number of arguments"
   | UknownRegister parsed_register ->
     let register_name = parsed_register.value in
     Printf.sprintf "Uknown register: %s." register_name
+  | UknownType parsed_type ->
+    let type_name = parsed_type.value in
+    Printf.sprintf "Uknown type: %s." type_name
   | BadRegister parsed_register ->
     let register_name = parsed_register.value in
     Printf.sprintf
@@ -42,6 +47,8 @@ let string_of_error error =
     Printf.sprintf "Undefined reference to \"%s\"." symbol_name
   | ValueOutOfBounds _ -> "Value out of bounds."
   | TypeError _ -> "Value does not match the expected type."
+  | InvalidValueDefinition (typename, msg) ->
+    Printf.sprintf "Invalid definition for type %s: %s" typename.value msg
 
 let get_file_line (position: location) filename =
   let input_file = open_in filename in
@@ -91,6 +98,7 @@ let print_assembler_error_in_file error filename =
   match error with
   | UknownInstruction name
   | UknownRegister name
+  | UknownType name
   | BadRegister name
   | SymbolRedefinition name
   | UndefinedReference name ->
@@ -105,5 +113,9 @@ let print_assembler_error_in_file error filename =
   | ValueOutOfBounds value ->
     let msg = string_of_error error in
     let location = { start_p = value.start_p; end_p = value.end_p } in
+    print_error_in_file_position location msg filename
+  | InvalidValueDefinition (typename, _) ->
+    let msg = string_of_error error in
+    let location = { start_p = typename.start_p; end_p = typename.end_p } in
     print_error_in_file_position location msg filename
   | _ -> print_endline @@ string_of_error error

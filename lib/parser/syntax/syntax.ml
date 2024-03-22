@@ -11,15 +11,15 @@ type argument =
   | IndirectRefExpr of string expression
 
 type value =
-  | NumberExpr of int expression
+  | NumberList of int expression list
 
 type label_name = string expression
 type type_name = string expression
 
 type value_definition = {
-  name: label_name;
-  typename: type_name;
-  value: value list
+  label: label_name;
+  typename: string expression;
+  value: value
 }
 
 type instruction_name = string expression
