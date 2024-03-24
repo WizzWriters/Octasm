@@ -53,11 +53,14 @@ argument:
   ;
 
 value_definition:
-  | name = LABEL; tname = TYPENAME;
-    value = separated_nonempty_list(COMMA, value)
-    {{ name = wrap name $loc(name); typename = wrap tname $loc(tname); value }}
+  | name = LABEL; tname = TYPENAME; value = value
+    {{ label = wrap name $loc(name); typename = wrap tname $loc(tname); value }}
   ;
 
 value:
-  | num = NUMBER { NumberExpr (wrap num $loc) }
+  | num_list = separated_nonempty_list(COMMA, number) { NumberList num_list }
+  ;
+
+number:
+  | num = NUMBER { (wrap num $loc) }
   ;

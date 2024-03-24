@@ -118,7 +118,7 @@ program: DIRECTIVE_DATA LABEL TYPENAME NUMBER TYPENAME
 ## value
 ##
 
-Error code 11 - Message not provided yet
+Unexpected token following value definition.
 
 program: DIRECTIVE_DATA LABEL TYPENAME NUMBER COMMA TYPENAME
 ##
