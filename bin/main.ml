@@ -1,4 +1,4 @@
-let usage_msg = "chip8_asm <input_file> -o <output_file>"
+let usage_msg = " <input_file> -o <output_file>"
 
 let input_file = ref ""
 let output_file = ref ""
@@ -54,7 +54,7 @@ let assemble filename =
 
 let main =
   if Array.length Sys.argv = 1 then
-    (Arg.usage speclist usage_msg; false)
+    (Arg.usage speclist (Sys.argv.(0) ^ usage_msg); false)
   else
     if parse_argv () then assemble !input_file else false
 
