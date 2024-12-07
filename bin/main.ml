@@ -1,7 +1,6 @@
 let usage_msg = " <input_file> -o <output_file>"
 
 let input_file = ref ""
-let output_file = ref ""
 
 let anon_fun filename =
   if input_file.contents = "" then
@@ -11,7 +10,8 @@ let anon_fun filename =
       ArgumentError ("Multiple input files specified.")
 
 let speclist = [
-  ("-o", Arg.Set_string output_file, "Set output file name")
+  ("-o", Arg.Set_string Options.output_file, "Set output file name");
+  ("--no-entry-point", Arg.Set Options.no_entry_point,  "Don't generate jump to entry point")
 ]
 
 let parse_argv () =
@@ -29,9 +29,9 @@ let get_default_output_filename input_filename =
 
 let save_to_file program_bytes =
   let output_file_name =
-    if !output_file = "" then
+    if !Options.output_file = "" then
       get_default_output_filename !input_file
-    else !output_file in
+    else !Options.output_file in
   let output = open_out_bin output_file_name in
   output_bytes output program_bytes;
   close_out output

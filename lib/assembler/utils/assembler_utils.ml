@@ -43,3 +43,12 @@ let get_address_value argument =
     else Assembler_error.throw @@ Assembler_error.ValueOutOfBounds number
   | NameRefExpr label -> get_label_offset label
   | _ -> Assembler_error.throw @@ Assembler_error.TypeError argument
+
+let create_dummy_expression value = {
+  start_p = Lexing.dummy_pos;
+  end_p = Lexing.dummy_pos;
+  value = value
+}
+
+let create_instruction name arguments: instruction =
+  create_dummy_expression name, arguments
