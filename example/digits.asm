@@ -1,9 +1,4 @@
 .text
-_start:
-  cls
-  ld %v0, $0
-  ld %v1, $0
-  call $main_loop
 
 # waits exactly one second
 wait:
@@ -15,6 +10,11 @@ wait_loop:
   sne %v3, %v4
   ret
   jp $wait_loop
+
+_start:
+  cls
+  ld %v0, $0
+  ld %v1, $0
 
 # switches between sprites every second
 main_loop:

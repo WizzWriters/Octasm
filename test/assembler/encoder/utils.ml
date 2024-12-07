@@ -1,13 +1,3 @@
-open Syntax
-
-let create_dummy_expression value = {
-  start_p = Lexing.dummy_pos;
-  end_p = Lexing.dummy_pos;
-  value = value
-}
-
-let create_instruction name arguments: instruction =
-  create_dummy_expression name, arguments
 
 let bytes_of_int_list int_list =
   let byte_list = List.map char_of_int int_list in

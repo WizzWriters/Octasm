@@ -1,5 +1,6 @@
 open Syntax
 open Utils
+open Assembler_utils
 
 let create_sprite byte_list =
   let dummy_label = create_dummy_expression "dummy" in

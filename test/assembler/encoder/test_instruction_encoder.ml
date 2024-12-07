@@ -1,5 +1,6 @@
 open Syntax
 open Utils
+open Assembler_utils
 
 let test_encode_instruction instruction expected_bytes =
   let test_bytes = Bytes.create 2 in

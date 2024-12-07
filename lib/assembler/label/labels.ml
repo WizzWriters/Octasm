@@ -41,8 +41,11 @@ let collect_labels_from_directive offset directive =
       List.fold_left collect_labels_from_value_def offset value_defs in
     if final_offset mod 2 = 0 then final_offset else final_offset + 1
 
+let get_starting_offset () =
+  if !Options.no_entry_point then 0x200 else 0x202
+
 let collect_labels program =
-  let starting_offset = 0x200 in
+  let starting_offset = get_starting_offset () in
   List.fold_left collect_labels_from_directive starting_offset program
   - starting_offset
 
