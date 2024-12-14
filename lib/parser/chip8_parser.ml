@@ -4,7 +4,7 @@ module I = MenhirInterpreter
 
 let get_error env =
   match I.stack env with
-  | lazy Nil -> "Program should start with a valid directive."
+  | lazy Nil -> "Program should start with a valid directive (.text or .data)."
   | lazy (Cons (I.Element (state,_,_,_), _)) ->
     try Menhir_parser_messages.message (I.number state) with
     | Not_found -> "Unknown error"

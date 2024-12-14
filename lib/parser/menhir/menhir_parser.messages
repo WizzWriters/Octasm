@@ -8,7 +8,7 @@ program: TYPENAME
 ##
 ##
 
-Error code 1 - Message not provided yet
+Program should start with a valid directive (.text or .data).
 
 program: DIRECTIVE_TEXT TYPENAME
 ##
@@ -20,7 +20,7 @@ program: DIRECTIVE_TEXT TYPENAME
 ## DIRECTIVE_TEXT
 ##
 
-Error code 2 - Message not provided yet
+Expected code block label after directive .text.
 
 program: DIRECTIVE_TEXT LABEL TYPENAME
 ##
@@ -32,7 +32,7 @@ program: DIRECTIVE_TEXT LABEL TYPENAME
 ## LABEL
 ##
 
-Error code 3 - Message not provided yet
+Expected list of instructions in the code block.
 
 program: DIRECTIVE_TEXT LABEL NAME TYPENAME
 ##
@@ -44,7 +44,7 @@ program: DIRECTIVE_TEXT LABEL NAME TYPENAME
 ## NAME
 ##
 
-Error code 4 - Message not provided yet
+Expected argument or next instruction.
 
 program: DIRECTIVE_TEXT LABEL NAME NAME_REF TYPENAME
 ##
@@ -57,7 +57,7 @@ program: DIRECTIVE_TEXT LABEL NAME NAME_REF TYPENAME
 ## argument
 ##
 
-Expected another instruction or a comma separated list of arguments.
+Expected argument or next instruction.
 
 program: DIRECTIVE_TEXT LABEL NAME NAME_REF COMMA TYPENAME
 ##
@@ -69,7 +69,7 @@ program: DIRECTIVE_TEXT LABEL NAME NAME_REF COMMA TYPENAME
 ## argument COMMA
 ##
 
-Error code 6 - Message not provided yet
+Invalid argument passed to instruction.
 
 program: DIRECTIVE_DATA TYPENAME
 ##
@@ -81,7 +81,7 @@ program: DIRECTIVE_DATA TYPENAME
 ## DIRECTIVE_DATA
 ##
 
-Error code 8 - Message not provided yet
+Expected code block label after directive .data.
 
 program: DIRECTIVE_DATA LABEL REGISTER
 ##
@@ -93,7 +93,7 @@ program: DIRECTIVE_DATA LABEL REGISTER
 ## LABEL
 ##
 
-Error code 9 - Message not provided yet
+Data label should be followed by a type.
 
 program: DIRECTIVE_DATA LABEL TYPENAME TYPENAME
 ##
@@ -105,7 +105,7 @@ program: DIRECTIVE_DATA LABEL TYPENAME TYPENAME
 ## LABEL TYPENAME
 ##
 
-Error code 10 - Message not provided yet
+Expected value after type declaration.
 
 program: DIRECTIVE_DATA LABEL TYPENAME NUMBER TYPENAME
 ##
@@ -130,4 +130,4 @@ program: DIRECTIVE_DATA LABEL TYPENAME NUMBER COMMA TYPENAME
 ## value COMMA
 ##
 
-Error code 12 - Message not provided yet
+Expected another value after comma.
