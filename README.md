@@ -35,14 +35,14 @@ The following example shows the basic syntax of this assembler. This program dis
 
 ## Install and run the assembler
 
-Assuming you have Ocaml environment set up with [dune](https://github.com/ocaml/dune?tab=readme-ov-file#installation-1) and [menhir](https://gallium.inria.fr/~fpottier/menhir/) packages installed, all you have to do is run:
+Assuming you have Ocaml environment set up with [dune](https://github.com/ocaml/dune?tab=readme-ov-file#installation-1) and [menhir](https://gallium.inria.fr/~fpottier/menhir/) packages installed and you cloned this repository, all you have to do is run:
 
 ```
 $ dune build
 $ dune install
 ```
 
-Then you can start to compile assembly files to chip8 programs:
+Then you can start to compile assembly files to chip8 programs using Octasm:
 
 ```
 $ octasm ./examples/counter.asm
