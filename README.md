@@ -97,7 +97,7 @@ When refering to a label we also start with a `$` prefix and follow it with the 
 Every data section is made out of definitions, that consist of label, type and value:
 
 ```asm
-.data
+.data                      # data section directive
     sprite1:               # this is a label of this value
         .sprite            # this is a type
             $0b10101000,   # sprite is written out as a list of bytes
@@ -115,7 +115,7 @@ Every data section is made out of definitions, that consist of label, type and v
             $0b01010000
 ```
 
-Currently there is only a one value type: `sprite`. You can refer to sprites via labels. For example to load an address of the sprite with label `sprite2` to address register, you can write `ld %i, $sprite2`.
+Currently there is only a one value type: `sprite`. You can refer to sprites via labels. For example to load the address of the sprite with label `sprite2` to address register, you can write `ld %i, $sprite2`.
 
 
 ## List of instructions
