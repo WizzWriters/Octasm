@@ -8,7 +8,7 @@ let create_program_buffer_with_start_jump program_size =
   let buffer, position = create_program_buffer (program_size + 2) in
   let start_label = create_dummy_expression "_start" in
   let call_instruction =
-    create_instruction "call" [NameRefExpr start_label] in
+    create_instruction "jp" [NameRefExpr start_label] in
   encode_instruction (buffer, position) call_instruction
 
 let encode_instruction_block (buffer, position) instruction_block =
