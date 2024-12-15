@@ -5,7 +5,7 @@ resemble that of the GNU Assembler.
 
 ## Example
 
-The following example shows the basic syntax of this assembler. This program displays digits 0 to 9 in a loop.
+The following example shows the basic syntax of Octasm. This program displays digits 0 to 9 in a loop.
 
 ```asm
 .text                      # start code section
@@ -35,7 +35,7 @@ The following example shows the basic syntax of this assembler. This program dis
 
 ## Install and run the assembler
 
-Assuming you have Ocaml environment set up with [dune](https://github.com/ocaml/dune?tab=readme-ov-file#installation-1) and [menhir](https://gallium.inria.fr/~fpottier/menhir/) packages installed and you cloned this repository, all you have to do is run:
+Assuming you have Ocaml environment set up with [dune](https://github.com/ocaml/dune?tab=readme-ov-file#installation-1) and [menhir](https://gallium.inria.fr/~fpottier/menhir/) packages installed, all you have to do is run these two commands in the root directory of this repository:
 
 ```
 $ dune build
@@ -48,7 +48,9 @@ Then you can start to compile assembly files to chip8 programs using Octasm:
 $ octasm ./examples/counter.asm
 ```
 
-The result will be saved to `./examples/counter.ch8` by default, but you can control path to output file via `-o` option. Next you can run the program using any chip8 interpreter (for example, check out [Cadmium](https://games.gulrak.net/cadmium/)).
+The compiled program in this case will be saved to the default path `./examples/counter.ch8`. You can control path to the output file via `-o` option.
+
+Next you can run the program using any chip8 interpreter (for example, check out [Cadmium](https://games.gulrak.net/cadmium/)).
 
 ## Syntax description
 
@@ -56,7 +58,7 @@ Every program consists of a code and data sections. Code sections are defined us
 
 ### Code Sections
 
-Every code section is made out of code blocks, that have label and a list of instructions:
+Every code section is made out of code blocks that have a label and a list of instructions:
 
 ```asm
 .text                 # code section directive
@@ -68,11 +70,11 @@ Every code section is made out of code blocks, that have label and a list of ins
 
 #### Labels
 
-Labels are names followed by colon, for example `wait_second:`. They allow as to refer to parts of chip8 programs (instructions or sprites) without knowing their exact address in the actual program.
+Labels are names followed by colon - for example `wait_second:`. They allow us to refer to parts of chip8 programs (code blocks or sprites) without knowing their exact address in the actual program.
 
-There is one special label called `_start` that indicates that this is an entry point to our program. It has to be present somewhere in the program.
+There is one special label called `_start` that marks the entry point to our program. It has to be present somewhere in the program.
 
-(Note: This behaviour can be modified with `--no-entry-point` option. With it enabled the program will start at the beggining, even if the program starts with a data section, as this assembler does not move around any of the sections or instructions - use only when necessary!)
+(Note: This behaviour can be modified with `--no-entry-point` option. With it enabled the program will start at the beggining - even if the program starts with a data section, as this assembler does not move around any of the sections or instructions - use this option with caution!)
 
 #### Instructions
 
@@ -80,7 +82,7 @@ Each instruction has a name and a list of arguments separated with commas (some 
 
 For example when writing `ld %v3, $60` we call instruction named `ld` with the first argument `%v3` and the second argument `$60`.
 
-List of instructions will be presented in a table in the next chapter (List of instructions).
+List of instructions will be presented in a table at the end of this document.
 
 #### Arguments
 
@@ -94,7 +96,7 @@ When refering to a label we also start with a `$` prefix and follow it with the 
 
 ### Data Sections
 
-Every data section is made out of definitions, that consist of label, type and value:
+Every data section is made out of definitions that consist of a label, a type and a value:
 
 ```asm
 .data                      # data section directive
@@ -115,12 +117,12 @@ Every data section is made out of definitions, that consist of label, type and v
             $0b01010000
 ```
 
-Currently there is only a one value type: `sprite`. You can refer to sprites via labels. For example to load the address of the sprite with label `sprite2` to address register, you can write `ld %i, $sprite2`.
+Currently there is only a one value type: `sprite`. You can refer to sprites via labels. For example to load the address of the sprite with label `sprite2` to address register, you can write `ld %i, $sprite2`. Address of this label will be resolved in compile time.
 
 
 ## List of instructions
 
-Octasm currently supports full basic CHIP-8 instruction set. You can refer to the [instruction set](http://devernay.free.fr/hacks/chip8/C8TECH10.HTM) to check what those instructions do exactly. The table below shows how names used there map to syntax used in Octasm.
+Octasm currently supports full basic CHIP-8 instruction set. You can refer to the [instruction set](http://devernay.free.fr/hacks/chip8/C8TECH10.HTM) to check what those instructions do exactly. The table below shows how names that are used there map to the syntax used in Octasm.
 
 | Technical Reference | Octasm                | Short description                      |
 | ------------------- | --------------------- | -------------------------------------- |
