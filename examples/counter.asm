@@ -1,4 +1,7 @@
-.text
+# Displays digits from 0 to 9 in a loop
+
+.text                      # start code section
+    wait_second:           # procedure that waits exactly one second
         ld %v3, $60
         ld %dt, %v3        # set the delay timer to 60
     wait_loop:
@@ -20,7 +23,3 @@
         sne %v2, $10       # if 10 reached, go back to 0
         ld %v2, $0
         jp $main_loop
-.data
-    test:
-        $0x12
-
